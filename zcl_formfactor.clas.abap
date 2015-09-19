@@ -20,5 +20,9 @@ METHOD if_quickfix_evaluation~evaluate.
 
 * todo
 
+  DATA: lv_foo TYPE i.
+
+  lv_foo = 2.
+
 ENDMETHOD.
 ENDCLASS.
