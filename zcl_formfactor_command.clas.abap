@@ -17,11 +17,14 @@ ENDCLASS.
 CLASS ZCL_FORMFACTOR_COMMAND IMPLEMENTATION.
 
 
-  METHOD apply_obj.
+METHOD apply_obj.
 
-    DATA: lv_i TYPE i.
+  DATA: lo_blackboard TYPE REF TO cl_art_blackboard.
 
-    lv_i = 2.
+  lo_blackboard = cl_art_blackboard=>create( ).
+  lo_blackboard->set_source_object( quickfix_source_object ).
 
-  ENDMETHOD.
+* CL_ART_APPLY_4_EXTRACT_CONST method CREATE
+
+ENDMETHOD.
 ENDCLASS.

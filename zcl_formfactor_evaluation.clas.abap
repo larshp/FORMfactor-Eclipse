@@ -1,11 +1,12 @@
 class ZCL_FORMFACTOR_EVALUATION definition
   public
+  inheriting from CL_QUICKFIX_EVALUATION_OBJ
   create public .
 
 public section.
 
-  interfaces IF_BADI_INTERFACE .
-  interfaces IF_QUICKFIX_EVALUATION .
+  methods EVALUATE_OBJ
+    redefinition .
 protected section.
 private section.
 ENDCLASS.
@@ -15,32 +16,36 @@ ENDCLASS.
 CLASS ZCL_FORMFACTOR_EVALUATION IMPLEMENTATION.
 
 
-METHOD IF_QUICKFIX_EVALUATION~EVALUATE.
+METHOD evaluate_obj.
 
-  APPEND INITIAL LINE TO all_adt_evaluation_results ASSIGNING FIELD-SYMBOL(<ls_res>).
-  <ls_res>-object_reference-uri = '/sap/bc/adt/zzformfactor/fix1'.
-  <ls_res>-object_reference-type = 'zzformfactor'.
-  <ls_res>-object_reference-name = 'FORMfactor fix 1'.
-  <ls_res>-object_reference-description = 'Description shown to the right'.
+  DATA: lo_result TYPE REF TO cl_quickfix_evaluation_result.
 
-  APPEND INITIAL LINE TO all_adt_evaluation_results ASSIGNING <ls_res>.
-  <ls_res>-object_reference-uri = '/sap/bc/adt/zzformfactor/fix2'.
-  <ls_res>-object_reference-type = 'zzformfactor'.
-  <ls_res>-object_reference-name = 'FORMfactor fix 2'.
-  <ls_res>-object_reference-description = 'Description shown to the right'.
+  DATA(lo_blackboard) = cl_art_blackboard=>create( ).
+  lo_blackboard->set_source_object( quickfix_source_object ).
+  cl_art_contrib_scan_result=>create( lo_blackboard
+    )->if_art_blackboard_contributor~contribute( ).
 
-* CL_ART_APPLY_4_EXTRACT_CONST method CREATE
+  DATA(lv_leading_key_word) = lo_blackboard->get_scan_result(
+    )->get_leading_key_word_for_stmnt(
+      i_statement_index = lo_blackboard->get_start_stmnt_index( )
+      i_include         = lo_blackboard->get_focused_include( ) ).
 
-* inherit from CL_QUICKFIX_ADT_RES_APPLY_BASE ?
-
-* ce_art_qfix=>find_by_uri
-
-* /sap/bc/adt/quickfixes/proposals/providers/refactoring/quickfixes/create_local_constant
-
-* enh implementation = SQUICKFIX_ADT_RES_APP
-
-* ZZFORMFACTOR_ADT_RES_APP
-*discovery class = ZCL_ZZFORMFACTOR_ADT_RES_APP
+  CASE lv_leading_key_word.
+    WHEN 'FORM'.
+      lo_result = NEW cl_quickfix_evaluation_result(
+        i_uri          = '/sap/bc/adt/zzformfactor/fix1'
+        i_display_name = 'FORMfactor: Move FORM to local class'
+        i_description  = 'todo, description'
+        i_type         = 'zzformfactor' ).
+      APPEND lo_result TO own_evaluation_results.
+    WHEN 'PERFORM'.
+      lo_result = NEW cl_quickfix_evaluation_result(
+        i_uri          = '/sap/bc/adt/zzformfactor/fix2'
+        i_display_name = 'FORMfactor: Call METHOD instead'
+        i_description  = 'todo, description'
+        i_type         = 'zzformfactor' ).
+      APPEND lo_result TO own_evaluation_results.
+  ENDCASE.
 
 ENDMETHOD.
 ENDCLASS.
