@@ -1,5 +1,9 @@
 # FORMfactor-Eclipse
 
+WORK IN PROGRESS
+
+Attempt to implement quick assists in ADT to help refactoring FORM routines into methods.
+
 ### Requirements
 * Latest version of [abapGit](https://github.com/larshp/abapGit)
 * SAP_BASIS 740 SP 8
