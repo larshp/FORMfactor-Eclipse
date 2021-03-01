@@ -1,5 +1,3 @@
-[![abaplint](http://abaplint.org/badges/larshp/FORMfactor-Eclipse)](http://abaplint.org/project/larshp/FORMfactor-Eclipse)
-
 # FORMfactor-Eclipse
 
 WORK IN PROGRESS
